@@ -4,8 +4,6 @@
 using namespace std;
 
 #define SQUARE_SIZE 48
-#define WINDOW_H 640
-#define WINDOW_W 800
 
 class Sprite;
 
@@ -13,44 +11,7 @@ class Scene {
     private:
         bool keepGoing = true;
 
-    public:
-     //   int WINDOW_W = 640;
-       // int WINDOW_H = 800;
-       // SDL_Window *win;
-        //Sprite sprites[];
-
-        Scene() {
-            this->init();
-        }
-
-        bool init() {
-            bool error = false;
-            if (SDL_Init(SDL_INIT_VIDEO) != 0){
-                cerr << "SDL_Init Error: " << SDL_GetError() << endl;
-                error = true;
-            }
-            
-            SDL_Window *win = SDL_CreateWindow("SimpleGE in C++", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
-
-            if (!win) {
-                cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
-                SDL_Quit();
-                error = true;
-            }
-
-            SDL_Renderer *ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-            if (!ren) {
-                cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << endl;
-                SDL_DestroyWindow(win);
-                SDL_Quit();
-                error = true;
-            }
-            
-
-            
-        
-
-        
+        int mainLoop() {
            // Sprite sampleSprite = Sprite();
         //    sampleSprite.dx = 3;
           //  sprites = {sampleSprite};
@@ -113,21 +74,57 @@ class Scene {
             SDL_DestroyRenderer(ren);
             SDL_DestroyWindow(win);
             SDL_Quit();
-            return error;
+            return 0;
         }
 
-//        void start(SDL_Window *win, SDL_Renderer *ren){
-    //        keepGoing = true;
-  //          while (keepGoing) {
-      //          mainLoop(win, ren);
-        //    }
-        //}
+        void start(){
+            keepGoing = true;
+            while (keepGoing) {
+                mainLoop();
+            }
+        }
         
-//        void stop() {
-  //          keepGoing = false;
-    //    }
+        void stop() {
+            keepGoing = false;
+        }
 
-        
+        bool init() {
+            bool error = false;
+            if (SDL_Init(SDL_INIT_VIDEO) != 0){
+                cerr << "SDL_Init Error: " << SDL_GetError() << endl;
+                error = true;
+            }
+            
+            win = SDL_CreateWindow("SimpleGE in C++", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
+
+            if (!win) {
+                cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
+                SDL_Quit();
+                error = true;
+            }
+
+            ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+            if (!ren) {
+                cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << endl;
+                SDL_DestroyWindow(win);
+                SDL_Quit();
+                error = true;
+            }
+
+            mainLoop();
+            return error;
+        }    
+
+    public:
+        int WINDOW_W = 800;
+        int WINDOW_H = 640;
+        SDL_Window *win;
+        SDL_Renderer *ren;
+        //Sprite sprites[];
+
+        Scene() {
+            this->init();
+        }        
 };
 
 class Sprite {
