@@ -11,6 +11,32 @@ class Scene {
     private:
         bool keepGoing = true;
 
+        bool init() {
+            bool error = false;
+            if (SDL_Init(SDL_INIT_VIDEO) != 0){
+                cerr << "SDL_Init Error: " << SDL_GetError() << endl;
+                error = true;
+            }
+            
+            win = SDL_CreateWindow("SimpleGE in C++", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
+
+            if (!win) {
+                cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
+                SDL_Quit();
+                error = true;
+            }
+
+            ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+            if (!ren) {
+                cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << endl;
+                SDL_DestroyWindow(win);
+                SDL_Quit();
+                error = true;
+            }
+
+            return error;
+        }    
+
         int mainLoop() {
            // Sprite sampleSprite = Sprite();
         //    sampleSprite.dx = 3;
@@ -74,46 +100,13 @@ class Scene {
             SDL_DestroyRenderer(ren);
             SDL_DestroyWindow(win);
             SDL_Quit();
+            stop();
             return 0;
-        }
+        }        
 
-        void start(){
-            keepGoing = true;
-            while (keepGoing) {
-                mainLoop();
-            }
-        }
-        
         void stop() {
             keepGoing = false;
         }
-
-        bool init() {
-            bool error = false;
-            if (SDL_Init(SDL_INIT_VIDEO) != 0){
-                cerr << "SDL_Init Error: " << SDL_GetError() << endl;
-                error = true;
-            }
-            
-            win = SDL_CreateWindow("SimpleGE in C++", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
-
-            if (!win) {
-                cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
-                SDL_Quit();
-                error = true;
-            }
-
-            ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-            if (!ren) {
-                cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << endl;
-                SDL_DestroyWindow(win);
-                SDL_Quit();
-                error = true;
-            }
-
-            mainLoop();
-            return error;
-        }    
 
     public:
         int WINDOW_W = 800;
@@ -125,6 +118,13 @@ class Scene {
         Scene() {
             this->init();
         }        
+
+        void start(){
+            keepGoing = true;
+            while (keepGoing) {
+                mainLoop();
+            }
+        }
 };
 
 class Sprite {
@@ -145,5 +145,6 @@ class Sprite {
 
 int main(int arc, char *argv[]) {
     Scene scene = Scene();
+    scene.start();
     return 0;
 }
