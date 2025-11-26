@@ -1,11 +1,28 @@
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 #define SQUARE_SIZE 48
 
-class Sprite;
+class Sprite {
+    public:
+        Sprite() {
+            // Constructor code here
+        }
+
+        bool init();
+        void addForce();
+        bool checkClicked();
+        void update();
+        void process();
+        void setBoundAction();
+        void checkBounds();
+        void hide();
+        void show();
+        bool isKeyPressed();
+};
 
 class Scene {
     private:
@@ -13,7 +30,7 @@ class Scene {
 
         bool init() {
             bool error = false;
-            if (SDL_Init(SDL_INIT_VIDEO) != 0){
+            if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0){
                 cerr << "SDL_Init Error: " << SDL_GetError() << endl;
                 error = true;
             }
@@ -38,9 +55,9 @@ class Scene {
         }    
 
         int mainLoop() {
-           // Sprite sampleSprite = Sprite();
+        //    Sprite sampleSprite = Sprite();
         //    sampleSprite.dx = 3;
-          //  sprites = {sampleSprite};
+        //    sprites.push_back(sampleSprite);
             SDL_Rect player = { WINDOW_W/2 - SQUARE_SIZE/2, WINDOW_H/2 - SQUARE_SIZE/2, SQUARE_SIZE, SQUARE_SIZE };
             const int speed = 300; // pixels per second
 
@@ -61,8 +78,65 @@ class Scene {
                     if (event.type == SDL_KEYDOWN) {
                         if (event.key.keysym.sym == SDLK_ESCAPE) running = false;
                     }
+                    processEvent(event);
                 }
 
+                // small delay to avoid 100% CPU in case vsync is off
+                process();
+                SDL_Delay(1);
+            }
+
+            SDL_DestroyRenderer(ren);
+            SDL_DestroyWindow(win);
+            SDL_Quit();
+            stop();
+            return 0;
+        }        
+
+        void stop() {
+            keepGoing = false;
+        }
+
+    public:
+        int WINDOW_W = 800;
+        int WINDOW_H = 640;
+        SDL_Window *win;
+        SDL_Renderer *ren;
+        vector<Sprite> sprites;
+
+        Scene() {
+            this->init();
+        }        
+
+        void start(){
+            keepGoing = true;
+            while (keepGoing) {
+                mainLoop();
+            }
+        }
+
+        void processEvent(SDL_Event event) {
+            // Event processing code here
+        }
+
+        void process() {
+            /* Happens once per frame, after event parsing.
+                Overwrite to add your own code
+            */
+        }
+};
+
+
+
+int main(int arc, char *argv[]) {
+    Scene scene = Scene();
+    scene.start();
+    return 0;
+}
+
+
+/*
+    
                 const Uint8 *ks = SDL_GetKeyboardState(NULL);
                 int dx = 0, dy = 0;
                 if (ks[SDL_SCANCODE_LEFT] || ks[SDL_SCANCODE_A]) dx = -1;
@@ -93,58 +167,4 @@ class Scene {
 
                 SDL_RenderPresent(ren);
 
-                // small delay to avoid 100% CPU in case vsync is off
-                SDL_Delay(1);
-            }
-
-            SDL_DestroyRenderer(ren);
-            SDL_DestroyWindow(win);
-            SDL_Quit();
-            stop();
-            return 0;
-        }        
-
-        void stop() {
-            keepGoing = false;
-        }
-
-    public:
-        int WINDOW_W = 800;
-        int WINDOW_H = 640;
-        SDL_Window *win;
-        SDL_Renderer *ren;
-        //Sprite sprites[];
-
-        Scene() {
-            this->init();
-        }        
-
-        void start(){
-            keepGoing = true;
-            while (keepGoing) {
-                mainLoop();
-            }
-        }
-};
-
-class Sprite {
-    private:
-        Scene scene = Scene();
-
-    public:
-        Sprite() {
-            // Constructor code here
-        }
-
-        int main(Scene scene) {
-            this->scene = scene;
-
-            return 0;
-        }
-};
-
-int main(int arc, char *argv[]) {
-    Scene scene = Scene();
-    scene.start();
-    return 0;
-}
+*/
