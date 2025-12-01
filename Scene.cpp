@@ -1,41 +1,51 @@
 #include "Scene.hpp"
 #include "Sprite.hpp"
 
+#define IMG_FLAGS (IMG_INIT_PNG | IMG_INIT_JPG)
+
 Scene::Scene() {
     this->init();
 }
 
 bool Scene::init() {
     bool error = false;
-            if (SDL_Init(SDL_INIT_EVERYTHING) != 0){
-                cerr << "SDL_Init Error: " << SDL_GetError() << endl;
-                error = true;
-            }
-            
-            win = SDL_CreateWindow("SimpleGE in C++", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
+        cerr << "SDL_Init Error: " << SDL_GetError() << endl;
+        error = true;
+    }
+    if ((IMG_Init(IMG_FLAGS) & IMG_FLAGS) != IMG_FLAGS) {
+        cerr << "IMG_Init Error: " << IMG_GetError() << endl;
+    }
+    
+    win = SDL_CreateWindow("SimpleGEC", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_W, WINDOW_H, SDL_WINDOW_SHOWN);
 
-            if (!win) {
-                cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
-                SDL_Quit();
-                error = true;
-            }
+    if (!win) {
+        cerr << "SDL_CreateWindow Error: " << SDL_GetError() << endl;
+        SDL_Quit();
+        error = true;
+    }
 
-            ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-            if (!ren) {
-                cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << endl;
-                SDL_DestroyWindow(win);
-                SDL_Quit();
-                error = true;
-            }
+    ren = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (!ren) {
+        cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << endl;
+        SDL_DestroyWindow(win);
+        SDL_Quit();
+        error = true;
+    }
 
-           // background = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, WINDOW_W, WINDOW_H);
+    // background = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, WINDOW_W, WINDOW_H);
 
-            Sprite sampleSprite = Sprite(ren);
-            sampleSprite.dxi = 3;
-            sprites.push_back(sampleSprite);
+    Sprite sampleSprite = Sprite(this, ren);
+    sampleSprite.dxi = 3;
+    sprites.push_back(sampleSprite);
 
-            return error;
-        }    
+    // render background
+//    setBackgroundColor(30, 30, 40, 255);
+    
+    loadBackgroundImage();
+
+    return error;
+}    
 
 int Scene::mainLoop() {
     bool running = true;
@@ -58,13 +68,21 @@ int Scene::mainLoop() {
             processEvent(event);
         }
 
-        // small delay to avoid 100% CPU in case vsync is off
+        SDL_RenderClear(ren);
+        SDL_RenderCopy(ren, background, NULL, NULL);
+        SDL_RenderPresent(ren);
+
         process();
+        
+
+        // small delay to avoid 100% CPU in case vsync is off
         SDL_Delay(1);
     }
 
+    SDL_DestroyTexture(background);
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
+    IMG_Quit();
     SDL_Quit();
     stop();
     return 0;
@@ -94,4 +112,17 @@ void Scene::process() {
 bool Scene::isKeyPressed() {
     // Key press checking code here
     return false;
+}
+
+void Scene::setBackgroundColor(int r, int g, int b, int a) {
+    SDL_SetRenderDrawColor(ren, r, g, b, a);
+    SDL_RenderClear(ren);
+ //   SDL_RenderPresent(ren);
+}
+
+void Scene::loadBackgroundImage() {
+    background = IMG_LoadTexture(ren, "images/lakes.jpg");
+    if (!background) {
+        cerr << "SDL_Texture Error: " << IMG_GetError() << endl;
+    }
 }

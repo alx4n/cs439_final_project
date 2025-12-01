@@ -2,6 +2,7 @@
 #define Sprite_hpp
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include <iostream>
 #include <tuple>
 #include "Scene.hpp"
@@ -31,12 +32,13 @@ class Sprite {
             HIDE,
             CONTINUE
         };
-
-        Sprite();
-        Sprite(SDL_Renderer *ren);
+        
+        Sprite(Scene *scene, SDL_Renderer *ren);
 
         tuple<int, int> position;
         BoundAction boundAction = WRAP;
+        SDL_Rect player;
+    //    SDL_Texture image;
         int x = 100;
         int y = 100;
         int dxi = 0;
@@ -46,13 +48,16 @@ class Sprite {
         bool clicked = false;
         bool mouseOver = false;
         bool mouseDown = false;
+        string imageFileName = "images/lakes.jpg";
         const Uint8 *ks;
+        Scene *scene;
 
-        bool init(Scene *scene, SDL_Renderer *ren);
+        bool init();
         void addForce();
         bool checkClicked();
-        void update(double seconds);
+        void update();
         void process();
+        void draw();
         void setBoundAction();
         void checkBounds();
         void hide();

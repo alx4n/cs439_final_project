@@ -7,12 +7,9 @@
 
 using namespace std;
 
-#define SQUARE_SIZE 48
-#define WINDOW_W 800
-#define WINDOW_H 640
-
 int main(int arc, char *argv[]) {
-    Scene scene = Scene();
-    scene.start();
+    Scene *scene = new Scene();
+    scene->start();
+    Sprite rect = Sprite(scene, scene->ren);
     return 0;
 }
