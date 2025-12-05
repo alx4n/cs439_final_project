@@ -13,6 +13,8 @@
 
 using namespace std;
 
+struct SDL_Texture;
+
 class Sprite;
 
 class Scene {
@@ -29,17 +31,20 @@ class Scene {
         SDL_Window *win;
         SDL_Renderer *ren;
         SDL_Texture *background;
-        vector<Sprite> sprites;
+        const char *imageFileName = "images/lakes.jpg";
+        vector<Sprite*> sprites;
+        Sprite *sampleSprite;
         double delta;
 
-        Scene();     
+        Scene();
         void start();
-        int mainLoop();
+        void mainLoop();
         void processEvent(SDL_Event event);
         void process();
         bool isKeyPressed();
         void setBackgroundColor(int r, int g, int b, int a);
-        void loadBackgroundImage();
+        void loadBackgroundImage(const char *fileName);
+        void drawToScreen();
 };
 
 #endif

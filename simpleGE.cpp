@@ -8,8 +8,9 @@
 using namespace std;
 
 int main(int arc, char *argv[]) {
-    Scene *scene = new Scene();
-    scene->start();
-    Sprite rect = Sprite(scene, scene->ren);
+    Scene scene = Scene();
+    scene.start();
+ //   Sprite rect = Sprite(scene, scene->ren);
+    
     return 0;
 }

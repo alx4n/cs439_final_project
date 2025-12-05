@@ -37,7 +37,8 @@ class Sprite {
 
         tuple<int, int> position;
         BoundAction boundAction = WRAP;
-        SDL_Rect player;
+        SDL_Rect spriteRect = {100, 100, 50, 50};
+    //    SDL_Surface *spriteSurf;
     //    SDL_Texture image;
         int x = 100;
         int y = 100;
@@ -48,13 +49,13 @@ class Sprite {
         bool clicked = false;
         bool mouseOver = false;
         bool mouseDown = false;
-        string imageFileName = "images/lakes.jpg";
         const Uint8 *ks;
         Scene *scene;
 
         bool init();
         void addForce();
         bool checkClicked();
+        void mainLoop();
         void update();
         void process();
         void draw();

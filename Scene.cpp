@@ -35,19 +35,22 @@ bool Scene::init() {
 
     // background = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, WINDOW_W, WINDOW_H);
 
-    Sprite sampleSprite = Sprite(this, ren);
-    sampleSprite.dxi = 3;
+    sampleSprite = new Sprite(this, ren);
+    sampleSprite->dxi = 3;
     sprites.push_back(sampleSprite);
 
     // render background
-//    setBackgroundColor(30, 30, 40, 255);
-    
-    loadBackgroundImage();
+    setBackgroundColor(30, 30, 40, 255);
+//    if (imageFileName != "") {
+  //      loadBackgroundImage(imageFileName);
+    //} else {
+      //  setBackgroundColor(255, 255, 0, 255);
+//    }
 
     return error;
 }    
 
-int Scene::mainLoop() {
+void Scene::mainLoop() {
     bool running = true;
     Uint64 now = SDL_GetPerformanceCounter();
     Uint64 last = 0;
@@ -67,10 +70,8 @@ int Scene::mainLoop() {
             }
             processEvent(event);
         }
-
-        SDL_RenderClear(ren);
-        SDL_RenderCopy(ren, background, NULL, NULL);
-        SDL_RenderPresent(ren);
+    //    sampleSprite->update();
+        drawToScreen();
 
         process();
         
@@ -79,13 +80,13 @@ int Scene::mainLoop() {
         SDL_Delay(1);
     }
 
+   // delete(sampleSprite);
     SDL_DestroyTexture(background);
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
     IMG_Quit();
     SDL_Quit();
     stop();
-    return 0;
 }
 
 void Scene::start() {
@@ -117,12 +118,33 @@ bool Scene::isKeyPressed() {
 void Scene::setBackgroundColor(int r, int g, int b, int a) {
     SDL_SetRenderDrawColor(ren, r, g, b, a);
     SDL_RenderClear(ren);
- //   SDL_RenderPresent(ren);
+    SDL_RenderPresent(ren);
 }
 
-void Scene::loadBackgroundImage() {
-    background = IMG_LoadTexture(ren, "images/lakes.jpg");
+void Scene::loadBackgroundImage(const char *fileName) {
+    background = IMG_LoadTexture(ren, fileName);
     if (!background) {
         cerr << "SDL_Texture Error: " << IMG_GetError() << endl;
     }
+}
+
+void Scene::drawToScreen() {
+    
+
+//    SDL_SetRenderDrawColor(ren, 30, 30, 40, 255);
+  //  SDL_RenderClear(ren);
+    //SDL_RenderPresent(ren);
+  //  setBackgroundColor(30, 30, 40, 255);
+//    SDL_RenderClear(ren);
+   // SDL_RenderCopy(ren, background, NULL, NULL);
+ //   sampleSprite->mainLoop();
+    sampleSprite->draw();
+   // for (Sprite sprite : sprites) {
+     //   sprite.draw();
+       // cout << "Sprite drawn" << endl;
+    //}
+ //   sampleSprite->draw();
+  //  SDL_RenderDrawRect(ren, sampleSprite->spriteRect);
+    
+   SDL_RenderPresent(ren);
 }
