@@ -6,48 +6,39 @@ using namespace std;
 Sprite::Sprite(Scene *scene, SDL_Renderer *ren) {
     this->scene = scene;
     this->ren = ren;
+    this->init();
 }
 
-bool Sprite::init() {
-    bool error = false;
-
-    /*
-    this->spriteRect->x = 100;
-    this->spriteRect->y = 100;
-    this->spriteRect->w = SQUARE_SIZE;
-    this->spriteRect->h = SQUARE_SIZE;
-  */
-//    spriteSurf = IMG_Load("images.venmoCode.png");
+void Sprite::init() {
+    this->spriteRect.x = this->x;
+    this->spriteRect.y = this->y;
+    this->spriteRect.w = SQUARE_SIZE;
+    this->spriteRect.h = SQUARE_SIZE;
+//    spriteSurf = IMG_Load("images/venmoCode.png");
   //  if (!spriteSurf) {
     //    cerr << "IMG_Load Error: " << IMG_GetError() << endl;
       //  error = true;
   //  }
-    speed = 300; // pixels per second
+    speed = 1; // pixels per second
  //   SDL_RenderClear(ren);
     SDL_SetRenderDrawColor(ren, 220, 80, 60, 255);
     SDL_RenderFillRect(ren, &spriteRect);
     SDL_RenderPresent(ren);
-
-    return error;
 }
 
 void Sprite::mainLoop() {
     update();
     process();
-    draw();
 }
 
 void Sprite::draw() {
     // draw player
-    //SDL_RenderClear(ren);
     SDL_SetRenderDrawColor(ren, 220, 80, 60, 255);
     SDL_RenderFillRect(ren, &spriteRect);
-   // SDL_RenderPresent(ren);
-  //  SDL_RenderCopy(ren, spriteRect, NULL, NULL);
 }
 
 void Sprite::process() {
-
+    //abstract method
 }
 
 void Sprite::update() {
@@ -66,7 +57,7 @@ void Sprite::update() {
     if (spriteRect.x + spriteRect.w > WINDOW_W) spriteRect.x = WINDOW_W - spriteRect.w;
     if (spriteRect.y + spriteRect.h > WINDOW_H) spriteRect.y = WINDOW_H - spriteRect.h;
     
-    draw();
+    //draw();
     
 //    SDL_SetRenderDrawColor(ren, 200, 200, 200, 255);
   //  SDL_Rect border = {10, 10, WINDOW_W - 20, WINDOW_H - 20};

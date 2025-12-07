@@ -37,7 +37,7 @@ class Sprite {
 
         tuple<int, int> position;
         BoundAction boundAction = WRAP;
-        SDL_Rect spriteRect = {100, 100, 50, 50};
+        SDL_Rect spriteRect;
     //    SDL_Surface *spriteSurf;
     //    SDL_Texture image;
         int x = 100;
@@ -52,7 +52,7 @@ class Sprite {
         const Uint8 *ks;
         Scene *scene;
 
-        bool init();
+        void init();
         void addForce();
         bool checkClicked();
         void mainLoop();

@@ -70,7 +70,7 @@ void Scene::mainLoop() {
             }
             processEvent(event);
         }
-    //    sampleSprite->update();
+        sampleSprite->mainLoop();
         drawToScreen();
 
         process();
@@ -118,7 +118,6 @@ bool Scene::isKeyPressed() {
 void Scene::setBackgroundColor(int r, int g, int b, int a) {
     SDL_SetRenderDrawColor(ren, r, g, b, a);
     SDL_RenderClear(ren);
-    SDL_RenderPresent(ren);
 }
 
 void Scene::loadBackgroundImage(const char *fileName) {
@@ -129,22 +128,13 @@ void Scene::loadBackgroundImage(const char *fileName) {
 }
 
 void Scene::drawToScreen() {
-    
+    setBackgroundColor(30, 30, 40, 255);
 
-//    SDL_SetRenderDrawColor(ren, 30, 30, 40, 255);
-  //  SDL_RenderClear(ren);
-    //SDL_RenderPresent(ren);
-  //  setBackgroundColor(30, 30, 40, 255);
-//    SDL_RenderClear(ren);
-   // SDL_RenderCopy(ren, background, NULL, NULL);
- //   sampleSprite->mainLoop();
     sampleSprite->draw();
    // for (Sprite sprite : sprites) {
      //   sprite.draw();
        // cout << "Sprite drawn" << endl;
     //}
- //   sampleSprite->draw();
-  //  SDL_RenderDrawRect(ren, sampleSprite->spriteRect);
     
    SDL_RenderPresent(ren);
 }
