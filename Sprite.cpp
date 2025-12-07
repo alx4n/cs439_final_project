@@ -43,6 +43,7 @@ void Sprite::process() {
 
 void Sprite::update() {
     ks = SDL_GetKeyboardState(NULL);
+    dxi = 0, dyi = 0;
     if (ks[SDL_SCANCODE_LEFT] || ks[SDL_SCANCODE_A]) dxi = -1;
     if (ks[SDL_SCANCODE_RIGHT] || ks[SDL_SCANCODE_D]) dxi = 1;
     if (ks[SDL_SCANCODE_UP] || ks[SDL_SCANCODE_W]) dyi = -1;
@@ -56,12 +57,4 @@ void Sprite::update() {
     if (spriteRect.y < 0) spriteRect.y = 0;
     if (spriteRect.x + spriteRect.w > WINDOW_W) spriteRect.x = WINDOW_W - spriteRect.w;
     if (spriteRect.y + spriteRect.h > WINDOW_H) spriteRect.y = WINDOW_H - spriteRect.h;
-    
-    //draw();
-    
-//    SDL_SetRenderDrawColor(ren, 200, 200, 200, 255);
-  //  SDL_Rect border = {10, 10, WINDOW_W - 20, WINDOW_H - 20};
-    //SDL_RenderDrawRect(ren, &border);
-
-    SDL_RenderPresent(ren);
 }

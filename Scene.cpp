@@ -36,7 +36,7 @@ bool Scene::init() {
     // background = SDL_CreateTexture(ren, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STATIC, WINDOW_W, WINDOW_H);
 
     sampleSprite = new Sprite(this, ren);
-    sampleSprite->dxi = 3;
+  //  sampleSprite->dxi = 0;
     sprites.push_back(sampleSprite);
 
     // render background
@@ -60,7 +60,7 @@ void Scene::mainLoop() {
         last = now;
         now = SDL_GetPerformanceCounter();
         delta = (double)((now - last)*1000 / (double)SDL_GetPerformanceFrequency()); //ms
-        double seconds = delta / 1000.0;
+      //  double seconds = delta / 1000.0;
 
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -80,7 +80,7 @@ void Scene::mainLoop() {
         SDL_Delay(1);
     }
 
-   // delete(sampleSprite);
+  //  delete(sampleSprite);
     SDL_DestroyTexture(background);
     SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
