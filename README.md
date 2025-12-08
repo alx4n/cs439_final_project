@@ -4,10 +4,12 @@ A port of Andy Harris's simpleGE Python game engine to C++ using SDL as a graphi
 ## Build Instructions
 Build and run (Ubuntu / Debian):
 1. Install dependencies:
-> sudo apt update
-> sudo apt install -y build-essential libsdl2-dev pkg-config
+```
+sudo apt update
+sudo apt install -y build-essential libsdl2-dev pkg-config
+```
 2. Run
-> make run
+`make run`
 
 ## Overview
 This is a game engine designed to be simple to use for the beginner programmer who wants to delve into C++ game programming. It is made up of two primary classes: the Scene and the Sprite.
